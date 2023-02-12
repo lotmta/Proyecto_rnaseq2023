@@ -31,7 +31,7 @@ colData(rse_gene_SRP199678)[
 rse_gene_SRP199678$sra_attribute.age <- factor(rse_gene_SRP199678$sra_attribute.age)
 rse_gene_SRP199678$sra_attribute.cx3cr1_genotype <- factor(tolower(rse_gene_SRP199678$sra_attribute.cx3cr1_genotype))
 
-# Hago un summary
+# Hago un summary de la edad y genotipo
 summary(as.data.frame(colData(rse_gene_SRP199678)[
     ,
     grepl("^sra_attribute.[age|cx3cr1_genotype]", colnames(colData(rse_gene_SRP199678)))
