@@ -5,7 +5,7 @@ library("edgeR")
 library("limma")
 library("pheatmap")
 
-# Cargamos nuestro rse
+# Cargamos nuestro rse y lo expandimos
 load('processed-data/rse_gene_SRP199678.RData')
 
 rse_gene_SRP199678 <- expand_sra_attributes(rse_gene_SRP199678)
@@ -37,11 +37,21 @@ colnames(mod)
 # Usamos limma para el analisis de expresion diferencial
 vGene <- voom(dge, mod, plot = TRUE)
 
+eb_results <- eBayes(lmFit(vGene))
+
+de_results <- topTable(
+    eb_results,
+    coef = 2,
+    number = nrow(rse_gene_SRP199678),
+    sort.by = "none"
+)
+dim(de_results)
+
 # Hacemos el heatmap
 exprs_heatmap <- vGene$E[rank(de_results$adj.P.Val) <= 100, ]
 
-df <- as.data.frame(colData(rse_gene_SRP199678)[, c('sra_attribute.age', 'sra_attribute.cx3cr1_genotype')])
-colnames(df) <- c("Edad", 'Genotipo')
+df <- as.data.frame(colData(rse_gene_SRP199678)[, c('sra_attribute.age', 'sra_attribute.cx3cr1_genotype', 'categoria')])
+colnames(df) <- c("Edad", 'Genotipo','Categoria')
 
 pheatmap(
     exprs_heatmap,
