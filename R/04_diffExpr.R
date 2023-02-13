@@ -50,8 +50,8 @@ dim(de_results)
 # Hacemos el heatmap
 exprs_heatmap <- vGene$E[rank(de_results$adj.P.Val) <= 100, ]
 
-df <- as.data.frame(colData(rse_gene_SRP199678)[, c('sra_attribute.age', 'sra_attribute.cx3cr1_genotype', 'categoria')])
-colnames(df) <- c("Edad", 'Genotipo','Categoria')
+df <- as.data.frame(colData(rse_gene_SRP199678)[, c('categoria','sra_attribute.age', 'sra_attribute.cx3cr1_genotype')])
+colnames(df) <- c('Categoria',"Edad", 'Genotipo')
 
 pheatmap(
     exprs_heatmap,
@@ -62,4 +62,4 @@ pheatmap(
     annotation_col = df
 )
 
-# Algo esta mal, no hay relación entre fenotipo y el nivel de expresion, probablemente un error de mi parte
+# Algo esta mal, no hay relación entre fenotipo y el nivel de expresión, probablemente un error de mi parte
