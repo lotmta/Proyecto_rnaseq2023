@@ -29,19 +29,18 @@ ggplot(as.data.frame(colData(rse_gene_SRP199678)), aes(y = assigned_gene_prop, x
     xlab("Grupo")
 # Mismo problema que con el EMM, orden numérico hace rara la visualización
 
-mod <- model.matrix( ~ 0 + sra_attribute.age + sra_attribute.cx3cr1_genotype + assigned_gene_prop,
-                    data = colData(rse_gene_SRP199678)
+mod <- model.matrix( ~ sra_attribute.cx3cr1_genotype + assigned_gene_prop,
+                     data = colData(rse_gene_SRP199678)
 )
 colnames(mod)
 
 # Usamos limma para el analisis de expresion diferencial
 vGene <- voom(dge, mod, plot = TRUE)
 
-# Hacemos el heatmap
 exprs_heatmap <- vGene$E[rank(de_results$adj.P.Val) <= 100, ]
 
-df <- as.data.frame(colData(rse_gene_SRP199678)[, c('sra_attribute.age', 'sra_attribute.cx3cr1_genotype')])
-colnames(df) <- c("Edad", 'Genotipo')
+df <- as.data.frame(colData(rse_gene_SRP199678)[, c('sra_attribute.cx3cr1_genotype', 'categoria')])
+colnames(df) <- c('Genotipo', 'categoria')
 
 pheatmap(
     exprs_heatmap,
@@ -52,4 +51,3 @@ pheatmap(
     annotation_col = df
 )
 
-# Algo esta mal, no hay relación entre fenotipo y el nivel de expresion, probablemente un error de mi parte
