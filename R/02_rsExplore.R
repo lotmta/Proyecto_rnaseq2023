@@ -20,6 +20,8 @@ rse_gene_SRP199678$sra_attribute.age[rse_gene_SRP199678$sra_attribute.age == '1 
 rse_gene_SRP199678$sra_attribute.age[rse_gene_SRP199678$sra_attribute.age == '2 years'] <- '24 months'
 
 rse_gene_SRP199678$sra_attribute.age <- as.numeric(rse_gene_SRP199678$sra_attribute.age)
+rse_gene_SRP199678$sra_attribute.cx3cr1_genotype <- factor(tolower(rse_gene_SRP199678$sra_attribute.cx3cr1_genotype))
+
 
 # Guardo los datos filtrados
 save(rse_gene_SRP199678, file = 'processed-data/rse_gene_SRP199678.RData')
