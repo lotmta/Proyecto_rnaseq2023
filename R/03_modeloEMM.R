@@ -15,7 +15,7 @@ sampleData <- data.frame(
 vd <- ExploreModelMatrix::VisualizeDesign(
     sampleData = sampleData,
     designFormula = ~ 0 + genotype + age,
-    textSizeFitted = 4
+    textSizeFitted = 3
 )
 
 cowplot::plot_grid(plotlist = vd$plotlist)

@@ -19,6 +19,8 @@ rse_gene_SRP199678 <- rse_gene_SRP199678[gene_means > 0.1, ]
 rse_gene_SRP199678$sra_attribute.age[rse_gene_SRP199678$sra_attribute.age == '1 year'] <- '12 months'
 rse_gene_SRP199678$sra_attribute.age[rse_gene_SRP199678$sra_attribute.age == '2 years'] <- '24 months'
 
+rse_gene_SRP199678$sra_attribute.age <- as.numeric(rse_gene_SRP199678$sra_attribute.age)
+
 # Guardo los datos filtrados
 save(rse_gene_SRP199678, file = 'processed-data/rse_gene_SRP199678.RData')
 
