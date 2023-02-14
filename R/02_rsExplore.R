@@ -15,6 +15,10 @@ summary(gene_means)
 
 rse_gene_SRP199678 <- rse_gene_SRP199678[gene_means > 0.1, ]
 
+# Cambio el formato de la edad para que las graficas se vean mejor
+rse_gene_SRP199678$sra_attribute.age[rse_gene_SRP199678$sra_attribute.age == '1 year'] <- '12 months'
+rse_gene_SRP199678$sra_attribute.age[rse_gene_SRP199678$sra_attribute.age == '2 years'] <- '24 months'
+
 # Guardo los datos filtrados
 save(rse_gene_SRP199678, file = 'processed-data/rse_gene_SRP199678.RData')
 
@@ -36,4 +40,6 @@ summary(as.data.frame(colData(rse_gene_SRP199678)[
     ,
     grepl("^sra_attribute.[age|cx3cr1_genotype]", colnames(colData(rse_gene_SRP199678)))
 ]))
+
+
 
