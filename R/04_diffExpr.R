@@ -50,8 +50,12 @@ dim(de_results)
 # Hacemos el heatmap
 exprs_heatmap <- vGene$E[rank(de_results$adj.P.Val) <= 100, ]
 
-df <- as.data.frame(colData(rse_gene_SRP199678)[, c('categoria','sra_attribute.age', 'sra_attribute.cx3cr1_genotype')])
-colnames(df) <- c('Categoria',"Edad", 'Genotipo')
+df <- as.data.frame(colData(rse_gene_SRP199678)[, c('sra_attribute.age', 'sra_attribute.cx3cr1_genotype', 'categoria')])
+colnames(df) <- c("Edad", 'Genotipo','Categoria')
+
+
+df$Edad <- factor(df$Edad, levels = c("2 months", "1 year","2 years"))
+df <- df[order(df$Edad),]
 
 pheatmap(
     exprs_heatmap,
