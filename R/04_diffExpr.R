@@ -33,6 +33,9 @@ ggplot(as.data.frame(colData(rse_gene_SRP199678)), aes(y = assigned_gene_prop, x
     xlab("Grupo")
 # Orden numérico hace rara la visualización (12,2,24 en vez de 2,12,24)
 
+# Para que se guarde en una resolucion decente
+ggsave(path = 'plots/',filename= 'Asigned_Gene_Prop.png',device='tiff', dpi=700)
+
 
 # Creamos el modelo para las graficas de expresion diferencial
 mod <- model.matrix( ~ 0 + sra_attribute.age + sra_attribute.cx3cr1_genotype + assigned_gene_prop,
@@ -81,3 +84,16 @@ rowData(rse_gene_SRP199678)$gene_id[rowData(rse_gene_SRP199678[,'SRR9139049'])$g
 
 # Creo un rse con solo ese gen, esto para hacer una comparación de expresión con los grupos con solo este
 rse_hnrnpa2b1 <- rse_gene_SRP199678[rownames(rse_gene_SRP199678) == 'ENSMUSG00000004980.16']
+
+singlGeneAnalisis <- data.frame(
+    geneCat = rse_hnrnpa2b1$categoria,
+    expValue = assay(rse_hnrnpa2b1)[,]
+)
+
+ggplot(singlGeneAnalisis,aes(y = expValue, x = geneCat)) +
+    geom_boxplot() +
+    theme_bw(base_size = 7)
+
+# Para que se guarde en una resolucion decente
+ggsave(path = 'plots/',filename= 'hnrnpa2b1Exp.png',device='tiff', dpi=700)
+
