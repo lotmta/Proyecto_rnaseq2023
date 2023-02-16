@@ -34,7 +34,7 @@ ggplot(as.data.frame(colData(rse_gene_SRP199678)), aes(y = assigned_gene_prop, x
 # Orden numérico hace rara la visualización (12,2,24 en vez de 2,12,24)
 
 # Para que se guarde en una resolucion decente
-ggsave(path = 'plots/',filename= 'Asigned_Gene_Prop.png',device='tiff', dpi=700)
+ggsave(path = 'plots/',filename= 'Asigned_Gene_Prop.png',device='tiff', dpi=250)
 
 
 # Creamos el modelo para las graficas de expresion diferencial
@@ -72,6 +72,8 @@ pheatmap(
     annotation_col = df
 )
 
+ggsave(path = 'plots/',filename= 'heatmap.png',device='tiff', dpi=250)
+
 # Algo puede estar mal, no hay relación entre fenotipo y el nivel de expresión, probablemente un error de mi parte.
 # Pero si hay relación entre la edad, si no estoy mal yo, el genotipo no tiene relación
 
@@ -79,21 +81,33 @@ pheatmap(
 volcanoplot(eb_results, coef = 2, highlight = 2, names = de_results$gene_name)
 # Hrnpa2b1 y Hnrnpk
 
-# Busco su ID
-rowData(rse_gene_SRP199678)$gene_id[rowData(rse_gene_SRP199678[,'SRR9139049'])$gene_name == 'Hnrnpa2b1']
+# Creo una funcion a la que le doy un gen de interés y me regresa una gráfica de expresión comparando
+# los 9 grupos. La guarda directamente al directorio, no se muestra directamente en pantalla
+findGeneExp <- function(geneName){
+    # Busco su ID
+    ID <- rowData(rse_gene_SRP199678)$gene_id[rowData(rse_gene_SRP199678[,'SRR9139049'])$gene_name == geneName]
 
-# Creo un rse con solo ese gen, esto para hacer una comparación de expresión con los grupos con solo este
-rse_hnrnpa2b1 <- rse_gene_SRP199678[rownames(rse_gene_SRP199678) == 'ENSMUSG00000004980.16']
+    # Creo un rse con solo ese gen, esto para hacer una comparación de expresión con los grupos con solo este
+    rse_singlGene <- rse_gene_SRP199678[rownames(rse_gene_SRP199678) == ID]
 
-singlGeneAnalisis <- data.frame(
-    geneCat = rse_hnrnpa2b1$categoria,
-    expValue = assay(rse_hnrnpa2b1)[,]
-)
+    singlGeneAnalisis <- data.frame(
+        geneCat = rse_singlGene$categoria,
+        expValue = assay(rse_singlGene)[,]
+    )
 
-ggplot(singlGeneAnalisis,aes(y = expValue, x = geneCat)) +
-    geom_boxplot() +
-    theme_bw(base_size = 7)
+    ggplot(singlGeneAnalisis,aes(y = expValue, x = geneCat)) +
+        geom_boxplot() +
+        theme_bw(base_size = 7)
 
-# Para que se guarde en una resolucion decente
-ggsave(path = 'plots/',filename= 'hnrnpa2b1Exp.png',device='tiff', dpi=700)
+    # Para que se guarde en una resolucion decente
+    ggsave(path = 'plots/',filename= paste(geneName, 'ExpPlot.png'),device='tiff', dpi=250)
 
+
+}
+
+# La llamo para Hnrnpa2b1
+findGeneExp('Hnrnpa2b1')
+# Parece que la diferencia de expresión se debe a unos outliers, en general es casi la misma
+
+# La llamo para Hnrnpk
+findGeneExp('Hnrnpk')
