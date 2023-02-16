@@ -20,6 +20,10 @@ dge <- calcNormFactors(dge)
 # Creamos los 9 grupos
 rse_gene_SRP199678$categoria <- paste(rse_gene_SRP199678$sra_attribute.age, rse_gene_SRP199678$sra_attribute.cx3cr1_genotype)
 
+rse_gene_SRP199678$sra_attribute.age <- as.numeric(rse_gene_SRP199678$sra_attribute.age)
+rse_gene_SRP199678$sra_attribute.cx3cr1_genotype <- factor(tolower(rse_gene_SRP199678$sra_attribute.cx3cr1_genotype))
+
+
 # Vemos la diferencia de expresion entre los 9 grupos, los grupos con 2 meses tiende a tener mas
 # outliers con menor expresion, en especial 2 months KO, pero la diferencia no es tan grande
 ggplot(as.data.frame(colData(rse_gene_SRP199678)), aes(y = assigned_gene_prop, x = categoria)) +
@@ -27,8 +31,10 @@ ggplot(as.data.frame(colData(rse_gene_SRP199678)), aes(y = assigned_gene_prop, x
     theme_bw(base_size = 7) +
     ylab("Assigned Gene Prop") +
     xlab("Grupo")
-# Mismo problema que con el EMM, orden numérico hace rara la visualización
+# Orden numérico hace rara la visualización (12,2,24 en vez de 2,12,24)
 
+
+# Creamos el modelo para las graficas de expresion diferencial
 mod <- model.matrix( ~ 0 + sra_attribute.age + sra_attribute.cx3cr1_genotype + assigned_gene_prop,
                     data = colData(rse_gene_SRP199678)
 )
@@ -54,9 +60,6 @@ df <- as.data.frame(colData(rse_gene_SRP199678)[, c('sra_attribute.age', 'sra_at
 colnames(df) <- c("Edad", 'Genotipo','Categoria')
 
 
-df$Edad <- factor(df$Edad, levels = c("2 months", "1 year","2 years"))
-df <- df[order(df$Edad),]
-
 pheatmap(
     exprs_heatmap,
     cluster_rows = TRUE,
@@ -66,4 +69,15 @@ pheatmap(
     annotation_col = df
 )
 
-# Algo esta mal, no hay relación entre fenotipo y el nivel de expresión, probablemente un error de mi parte
+# Algo puede estar mal, no hay relación entre fenotipo y el nivel de expresión, probablemente un error de mi parte.
+# Pero si hay relación entre la edad, si no estoy mal yo, el genotipo no tiene relación
+
+# Hago volcano plot para ver en que genes hay mayor diferencia de expresión
+volcanoplot(eb_results, coef = 2, highlight = 2, names = de_results$gene_name)
+# Hrnpa2b1 y Hnrnpk
+
+# Busco su ID
+rowData(rse_gene_SRP199678)$gene_id[rowData(rse_gene_SRP199678[,'SRR9139049'])$gene_name == 'Hnrnpa2b1']
+
+# Creo un rse con solo ese gen, esto para hacer una comparación de expresión con los grupos con solo este
+rse_hnrnpa2b1 <- rse_gene_SRP199678[rownames(rse_gene_SRP199678) == 'ENSMUSG00000004980.16']
