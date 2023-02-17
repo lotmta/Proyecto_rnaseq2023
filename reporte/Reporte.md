@@ -13,3 +13,5 @@ El estudio que voy a usar para mi análisis busca ver si mutaciones en el gen Cx
 
 ## Datos y Modelo Estadistico
 Como ya mencione, tenemos 3 tipos de ratones en cuanto a genotipo. Aquellos que no tienen Cx3cr1 (KO), aquellos con solo una copia (Het) y los controles, con ambas copias (WT). Para este analisis tambien tomamos en cuenta por obvias razones la edad de los ratones, muestras se tomaron de todos los grupos de ratones a 2, 12 y 24 meses de edad. 
+
+![Modelo Estadistico para el Analisis](https://raw.githubusercontent.com/lotmta/Proyecto_rnaseq2023/master/plots/Matriz_modelo.png)
