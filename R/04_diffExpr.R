@@ -97,10 +97,13 @@ findGeneExp <- function(geneName){
 
     ggplot(singlGeneAnalisis,aes(y = expValue, x = geneCat)) +
         geom_boxplot() +
-        theme_bw(base_size = 7)
+        ggtitle(paste('Expresion de',geneName)) +
+        theme_bw(base_size = 7) +
+        ylab("Nivel de Expresion") +
+        xlab("Grupo")
 
     # Para que se guarde en una resolucion decente
-    ggsave(path = 'plots/',filename= paste(geneName, 'ExpPlot.png'),device='tiff', dpi=250)
+    ggsave(path = 'plots/',filename= paste(geneName, 'ExpPlot.png', sep =''),device='tiff', dpi=250)
 
 
 }
