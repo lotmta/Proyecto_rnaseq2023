@@ -34,7 +34,7 @@ ggplot(as.data.frame(colData(rse_gene_SRP199678)), aes(y = assigned_gene_prop, x
 # Orden numérico hace rara la visualización (12,2,24 en vez de 2,12,24)
 
 # Para que se guarde en una resolucion decente
-ggsave(path = 'plots/',filename= 'Asigned_Gene_Prop.png',device='tiff', dpi=250)
+ggsave(filename= 'plots/Asigned_Gene_Prop.png', dpi=250)
 
 
 # Creamos el modelo para las graficas de expresion diferencial
@@ -103,7 +103,7 @@ findGeneExp <- function(geneName){
         xlab("Grupo")
 
     # Para que se guarde en una resolucion decente
-    ggsave(path = 'plots/',filename= paste(geneName, 'ExpPlot.png', sep =''),device='tiff', dpi=250)
+    ggsave(path = 'plots/',filename= paste(geneName, 'ExpPlot.png', sep =''),dpi=250)
 
 
 }
